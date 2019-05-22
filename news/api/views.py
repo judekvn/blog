@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework import generics
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 
 from news.models import Article, Journalist
 from news.api.serializer import ArticleSerializer, JournalistSerializer
@@ -12,6 +13,7 @@ class JournalistListCreateAPIView(generics.ListCreateAPIView):
 
     queryset = Journalist.objects.all()
     serializer_class = JournalistSerializer
+    permission_classes = [IsAdminUser]
     
     # def get(self, request):
     #     journalist = Journalist.objects.all()
@@ -30,6 +32,7 @@ class ArticleListCreateAPIView(generics.ListCreateAPIView):
 
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
     # def get(self, request):
     #     article = Article.objects.filter(active=True)
     #     serializer = ArticleSerializer(article, many=True)
@@ -46,6 +49,8 @@ class ArticleDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     # def get_object(self, pk):
     #     article = get_object_or_404(Article, pk=pk)
     #     return article
